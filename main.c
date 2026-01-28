@@ -16,27 +16,32 @@ struct Pessoas
 
 
 //funcoes inicio
+
+
 void menuClientes()
 {
     int selecionarCliente;
-    printf("1 - Listar clientes\n");
-    printf("2 - Buscar clientes\n");
-    printf("3 - Editar clientes\n");
-    printf("4 - Remover clientes\n");
-    printf("5 - Retornar ao menu principal\n");
+    printf("1 - Cadastrar clientes\n");
+    printf("2 - Listar clientes\n");
+    printf("3 - Buscar clientes\n");
+    printf("4 - Editar clientes\n");
+    printf("5 - Remover clientes\n");
+    printf("6 - Retornar ao menu principal\n");
     printf("\n");
     scanf("%d", &selecionarCliente);
-    while(selecionarCliente!=5)
+    while(selecionarCliente!=6)
     {
         if(selecionarCliente==1) printf("bom dia\n");
         if(selecionarCliente==2);
         if(selecionarCliente==3);
         if(selecionarCliente==4);
-        printf("1 - Listar clientes\n");
-        printf("2 - Buscar clientes\n");
-        printf("3 - Editar clientes\n");
-        printf("4 - Remover clientes\n");
-        printf("5 - Retornar ao menu principal\n");
+        if(selecionarCliente==5);
+        printf("1 - Cadastrar clientes\n");
+        printf("2 - Listar clientes\n");
+        printf("3 - Buscar clientes\n");
+        printf("4 - Editar clientes\n");
+        printf("5 - Remover clientes\n");
+        printf("6 - Retornar ao menu principal\n");
         printf("\n");
         scanf("%d", &selecionarCliente);
     }
@@ -48,24 +53,27 @@ void menuClientes()
 void menuProdutos()
 {
     int selecionarProduto;
-    printf("1 - Listar produtos\n");
-    printf("2 - Buscar produtos\n");
-    printf("3 - Editar produtos\n");
-    printf("4 - Remover produtos\n");
-    printf("5 - Retornar ao menu principal\n");
+    printf("1 - Cadastrar produtos\n");
+    printf("2 - Listar produtos\n");
+    printf("3 - Buscar produtos\n");
+    printf("4 - Editar produtos\n");
+    printf("5 - Remover produtos\n");
+    printf("6 - Retornar ao menu principal\n");
     printf("\n");
     scanf("%d", &selecionarProduto);
-    while(selecionarProduto!=5)
+    while(selecionarProduto!=6)
     {
         if(selecionarProduto==1) printf("bom dia\n");
         if(selecionarProduto==2);
         if(selecionarProduto==3);
         if(selecionarProduto==4);
-        printf("1 - Listar produtos\n");
-        printf("2 - Buscar produtos\n");
-        printf("3 - Editar produtos\n");
-        printf("4 - Remover produtos\n");
-        printf("5 - Retornar ao menu principal\n");
+        if(selecionarProduto==5);
+        printf("1 - Cadastrar produtos\n");
+        printf("2 - Listar produtos\n");
+        printf("3 - Buscar produtos\n");
+        printf("4 - Editar produtos\n");
+        printf("5 - Remover produtos\n");
+        printf("6 - Retornar ao menu principal\n");
         printf("\n");
         scanf("%d", &selecionarProduto);
     }
