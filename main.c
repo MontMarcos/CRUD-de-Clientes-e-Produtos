@@ -1,7 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "modulo.h"
+
+#include "modulofunc.h"
 
 int main()
 {

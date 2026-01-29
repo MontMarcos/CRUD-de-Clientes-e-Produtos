@@ -1,14 +1,11 @@
-#ifndef crud
-#define crud
+#ifndef crudfunc
+#define crudfunc
 
-//structs inicio
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "modulostruct.h"
 
-struct Pessoas
-{
-    char cpf[14];
-    char telefone[14];
-    char *nome;
-};
 void limpaBuffer();
 void menuClientes();
 void menuProdutos();

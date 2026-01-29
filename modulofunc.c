@@ -1,5 +1,4 @@
-#include "modulo.h"
-#include <stdio.h>
+#include "modulofunc.h"
 
 //funcoes inicio
 
