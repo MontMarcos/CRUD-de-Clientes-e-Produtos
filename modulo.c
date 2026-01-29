@@ -55,6 +55,9 @@ void menuClientes()
             printf("bom dia 5\n");
             break;
 
+            case 6:
+            break;
+
             default:
             printf("Comando nao encontrado\n");
             break;
@@ -107,6 +110,9 @@ void menuProdutos()
             printf("bom dia 5\n");
             break;
 
+            case 6:
+            break;
+
             default:
             printf("Comando nao encontrado\n");
             break;
@@ -149,11 +155,6 @@ void modoComprador()
                 break;
 
                 case 4:
-                printf("bom dia 4\n");
-                break;
-
-                case 5:
-                printf("bom dia 5\n");
                 break;
 
                 default:
