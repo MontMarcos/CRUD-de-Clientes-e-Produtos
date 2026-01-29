@@ -9,7 +9,7 @@ struct Pessoas
     char telefone[14];
     char *nome;
 };
-
+void limpaBuffer();
 void menuClientes();
 void menuProdutos();
 void modoComprador();
