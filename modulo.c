@@ -4,24 +4,20 @@
 //funcoes inicio
 
 
+void limpaBuffer()
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+    // void que limpa o buffer inteiro caso algo que nao seja um int seja a entrada do menu
+    // usar sempre que depois do scanf quando for entrada para os menus.
+}
+
+
 void menuClientes()
 {
     int selecionarCliente;
-    printf("1 - Cadastrar clientes\n");
-    printf("2 - Listar clientes\n");
-    printf("3 - Buscar clientes\n");
-    printf("4 - Editar clientes\n");
-    printf("5 - Remover clientes\n");
-    printf("6 - Retornar ao menu principal\n");
-    printf("\n");
-    scanf("%d", &selecionarCliente);
-    while(selecionarCliente!=6)
+    do
     {
-        if(selecionarCliente==1) printf("bom dia\n");
-        if(selecionarCliente==2);
-        if(selecionarCliente==3);
-        if(selecionarCliente==4);
-        if(selecionarCliente==5);
         printf("1 - Cadastrar clientes\n");
         printf("2 - Listar clientes\n");
         printf("3 - Buscar clientes\n");
@@ -29,31 +25,50 @@ void menuClientes()
         printf("5 - Remover clientes\n");
         printf("6 - Retornar ao menu principal\n");
         printf("\n");
-        scanf("%d", &selecionarCliente);
-    }
+        if (scanf("%d", &selecionarCliente) != 1)
+        {
+            printf("Entrada invalida.\n");
+            limpaBuffer();
+            selecionarCliente = -1;
+            continue;
+        }
+        switch (selecionarCliente)
+        {
+            case 1:
+            printf("bom dia 1\n");
+            break;
 
+            case 2:
+            printf("bom dia 2\n");
 
+            break;
+
+            case 3:
+            printf("bom dia 3\n");
+            break;
+
+            case 4:
+            printf("bom dia 4\n");
+            break;
+
+            case 5:
+            printf("bom dia 5\n");
+            break;
+
+            default:
+            printf("Comando nao encontrado\n");
+            break;
+        }
+
+    } while (selecionarCliente!= 6);
+    
 }
-
 
 void menuProdutos()
 {
     int selecionarProduto;
-    printf("1 - Cadastrar produtos\n");
-    printf("2 - Listar produtos\n");
-    printf("3 - Buscar produtos\n");
-    printf("4 - Editar produtos\n");
-    printf("5 - Remover produtos\n");
-    printf("6 - Retornar ao menu principal\n");
-    printf("\n");
-    scanf("%d", &selecionarProduto);
-    while(selecionarProduto!=6)
+    do
     {
-        if(selecionarProduto==1) printf("bom dia\n");
-        if(selecionarProduto==2);
-        if(selecionarProduto==3);
-        if(selecionarProduto==4);
-        if(selecionarProduto==5);
         printf("1 - Cadastrar produtos\n");
         printf("2 - Listar produtos\n");
         printf("3 - Buscar produtos\n");
@@ -61,33 +76,92 @@ void menuProdutos()
         printf("5 - Remover produtos\n");
         printf("6 - Retornar ao menu principal\n");
         printf("\n");
-        scanf("%d", &selecionarProduto);
-    }
-}
 
+        if (scanf("%d", &selecionarProduto) != 1)
+        {
+            printf("Entrada invalida.\n");
+            limpaBuffer();
+            selecionarProduto = -1;
+            continue;
+        }
+
+        switch (selecionarProduto)
+        {
+            case 1:
+            printf("bom dia 1\n");
+            break;
+
+            case 2:
+            printf("bom dia 2\n");
+            break;
+
+            case 3:
+            printf("bom dia 3\n");
+            break;
+
+            case 4:
+            printf("bom dia 4\n");
+            break;
+
+            case 5:
+            printf("bom dia 5\n");
+            break;
+
+            default:
+            printf("Comando nao encontrado\n");
+            break;
+        } 
+
+    } while (selecionarProduto!= 6);
+}
 
 void modoComprador()
 {
     // rodar funcao de listar e escolher cliente
     int selecionarCompras;
-    printf("1 - Adicionar produto ao carrinho\n");
-    printf("2 - listar produtos no carrinho\n");
-    printf("3 - Remover produtos do carrinho\n");
-    printf("4 - Retornar ao menu principal\n");
-    printf("\n");
-    scanf("%d", &selecionarCompras);
-    while(selecionarCompras!=4)
+
+    do
     {
-        if(selecionarCompras==1) printf("bom dia\n");
-        if(selecionarCompras==2);
-        if(selecionarCompras==3);
         printf("1 - Adicionar produto ao carrinho\n");
         printf("2 - listar produtos no carrinho\n");
         printf("3 - Remover produtos do carrinho\n");
         printf("4 - Retornar ao menu principal\n");
         printf("\n");
-        scanf("%d", &selecionarCompras);
-    }
+        if (scanf("%d", &selecionarCompras) != 1)
+        {
+            printf("Entrada invalida.\n");
+            limpaBuffer();
+            selecionarCompras = -1;
+            continue;
+        }
+            switch (selecionarCompras)
+            {
+                case 1:
+                printf("bom dia 1\n");
+                break;
+
+                case 2:
+                printf("bom dia 2\n");
+                break;
+
+                case 3:
+                printf("bom dia 3\n");
+                break;
+
+                case 4:
+                printf("bom dia 4\n");
+                break;
+
+                case 5:
+                printf("bom dia 5\n");
+                break;
+
+                default:
+                printf("Comando nao encontrado\n");
+                break;
+            }
+
+    }while(selecionarCompras!=4);
 }
 
 
@@ -100,15 +174,36 @@ void menuPrincipal(int *i)
     printf("3 - Modo Comprador\n");
     printf("4 - Sair.\n");
     printf("\n");
-    scanf("%d", &selecionar);
-    if(selecionar==1) menuClientes();
-    if(selecionar==2) menuProdutos();
-    if(selecionar==3) modoComprador();
-    if(selecionar==4)
+    if (scanf("%d", &selecionar) != 1)
     {
-    *i=1;
-    return;
+        printf("Entrada invalida.\n");
+        limpaBuffer();
+        selecionar = -1;
     }
+    switch (selecionar)
+        {
+            case 1:
+            menuClientes();
+            break;
+
+            case 2:
+            menuProdutos();
+            break;
+
+            case 3:
+            modoComprador();
+            break;
+
+            case 4:
+            printf("Saindo do menu\n");
+            *i=1;
+            return;
+
+            default:
+            printf("Comando nao encontrado\n");
+            break;
+        }
+    
 }
 
 
