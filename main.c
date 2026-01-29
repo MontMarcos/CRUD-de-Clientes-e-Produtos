@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "modulo.h"
+#include "modulo.c"
 
 int main()
 {
