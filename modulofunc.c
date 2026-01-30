@@ -51,6 +51,7 @@ void cadastrarCliente(Clientes *listaC)
     Clientes *novo;
     novo = malloc(sizeof(Clientes));
     int j=0;
+    // refazer com fgets, com scanf ficou meio ruim
     do
     {
         if(j==1)
@@ -84,18 +85,37 @@ void cadastrarCliente(Clientes *listaC)
         listaC->prox=novo;
 };
 
-void ListarCliente(Clientes *listaC)
+// void ListarCliente(Clientes *listaC)
+// {
+//     Clientes *imprime;
+//     int i;
+//     printf("\n");
+//     for (imprime=listaC->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
+//     {
+//         printf("%d - %s - cpf: %s - telefone: %s\n",i, imprime->nome, imprime->cpf, imprime->telefone);
+//     }
+//     printf("\n");
+//     return;
+// };
+
+
+void buscarCliente(Clientes *listaC)
 {
-    Clientes *imprime;
-    int i;
-    printf("\n");
-    for (imprime=listaC->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
+    Clientes *busca;
+    char buscador[12];
+    printf("Digite o cpf a ser buscado:");
+    scanf("%s", buscador);
+    for (busca=listaC->prox;strcmp(buscador,busca->cpf)!=0 || busca!=NULL ;busca=busca->prox);
+    if(busca==NULL)
     {
-        printf("%d - %s\n",i, imprime->nome);
+        printf("Cpf nao encontrado");
     }
-    printf("\n");
-    return;
+    else
+    {
+        printf("cpf encontrado: %s\n nome: %s\n telefone: %s\n", busca->cpf, busca->nome, busca->telefone);
+    }
 };
+
 
 void menuClientes(Clientes *listaC)
 {
@@ -127,7 +147,7 @@ void menuClientes(Clientes *listaC)
             break;
 
             case 3:
-            printf("bom dia 3\n");
+//            buscarCliente(listaC);
             break;
 
             case 4:

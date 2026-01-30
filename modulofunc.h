@@ -11,6 +11,7 @@ void nomeDinamico(Clientes *novo);
 Clientes * criarlistaClientes();
 void cadastrarCliente(Clientes *listaC);
 void ListarCliente(Clientes *listaC);
+void buscarCliente(Clientes *listaC);
 void menuClientes(Clientes *listaC);
 void menuProdutos();
 void modoComprador();
