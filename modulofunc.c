@@ -3,6 +3,7 @@
 //funcoes inicio
 
 
+//funcoes meio
 void limpaBuffer()
 {
     int c;
@@ -10,7 +11,6 @@ void limpaBuffer()
     // void que limpa o buffer inteiro caso algo que nao seja um int seja a entrada do menu
     // usar sempre que depois do scanf quando for entrada para os menus.
 }
-
 
 void nomeDinamico(Clientes *novo)
 {
@@ -35,7 +35,6 @@ void nomeDinamico(Clientes *novo)
     }
 }
 
-
 Clientes * criarlistaClientes()
 {
     Clientes *listaC;
@@ -45,6 +44,7 @@ Clientes * criarlistaClientes()
     return listaC;
 };
 
+//funções do cliente
 
 void cadastrarCliente(Clientes *listaC)
 {
@@ -85,37 +85,98 @@ void cadastrarCliente(Clientes *listaC)
         listaC->prox=novo;
 };
 
-// void ListarCliente(Clientes *listaC)
-// {
-//     Clientes *imprime;
-//     int i;
-//     printf("\n");
-//     for (imprime=listaC->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
-//     {
-//         printf("%d - %s - cpf: %s - telefone: %s\n",i, imprime->nome, imprime->cpf, imprime->telefone);
-//     }
-//     printf("\n");
-//     return;
-// };
-
+void ListarCliente(Clientes *listaC)
+{
+    Clientes *imprime;
+    int i;
+    printf("\n");
+    for (imprime=listaC->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
+    {
+        printf("%d - %s - cpf: %s - telefone: %s\n",i, imprime->nome, imprime->cpf, imprime->telefone);
+    }
+    printf("\n");
+    return;
+};
 
 void buscarCliente(Clientes *listaC)
 {
     Clientes *busca;
     char buscador[12];
-    printf("Digite o cpf a ser buscado:");
-    scanf("%s", buscador);
-    for (busca=listaC->prox;strcmp(buscador,busca->cpf)!=0 || busca!=NULL ;busca=busca->prox);
-    if(busca==NULL)
-    {
-        printf("Cpf nao encontrado");
-    }
-    else
-    {
-        printf("cpf encontrado: %s\n nome: %s\n telefone: %s\n", busca->cpf, busca->nome, busca->telefone);
-    }
-};
 
+    printf("Digite o cpf a ser buscado: ");
+    scanf("%11s", buscador);
+
+    busca = listaC->prox;
+
+    while (busca != NULL && strcmp(buscador, busca->cpf) != 0) {
+        busca = busca->prox;
+    }
+
+    if (busca == NULL) {
+        printf("Cpf nao encontrado\n");
+    } else {
+        printf("cpf encontrado: %s\nnome: %s\ntelefone: %s\n",
+               busca->cpf, busca->nome, busca->telefone);
+    }
+}
+
+void editarCliente(Clientes *listaC)
+{
+    Clientes *atual = listaC->prox;
+    char buscador[12];
+
+    printf("Digite o cpf do cliente a ser editado: ");
+    scanf("%11s", buscador);
+
+    while (atual != NULL && strcmp(buscador, atual->cpf) != 0) {
+        atual = atual->prox;
+    }
+
+    if (atual == NULL) {
+        printf("Cpf nao encontrado\n");
+    } else {
+        printf("Digite o novo nome: ");
+        limpaBuffer();
+        nomeDinamico(atual);
+        if (atual->nome == NULL) {
+            printf("Erro ao ler nome\n");
+            return;
+        }
+        printf("Digite o novo telefone: ");
+        scanf("%s", atual->telefone);
+        printf("Cliente editado com sucesso\n");
+    }
+}
+
+void removerCliente(Clientes *listaC)
+{
+    Clientes *atual = listaC;
+    Clientes *anterior = NULL;
+    char buscador[12];
+
+    printf("Digite o cpf do cliente a ser removido: ");
+    scanf("%11s", buscador);
+
+    while (atual != NULL && strcmp(buscador, atual->cpf) != 0) {
+        anterior = atual;
+        atual = atual->prox;
+    }
+
+    if (atual == NULL) {
+        printf("Cpf nao encontrado\n");
+    } else {
+        if (anterior == NULL) {
+            listaC->prox = atual->prox;
+        } else {
+            anterior->prox = atual->prox;
+        }
+        free(atual->nome);
+        free(atual);
+        printf("Cliente removido com sucesso\n");
+    }
+}
+
+//funcoes do menu
 
 void menuClientes(Clientes *listaC)
 {
@@ -147,15 +208,15 @@ void menuClientes(Clientes *listaC)
             break;
 
             case 3:
-//            buscarCliente(listaC);
+            buscarCliente(listaC);
             break;
 
             case 4:
-            printf("bom dia 4\n");
+            editarCliente(listaC);
             break;
-
+            
             case 5:
-            printf("bom dia 5\n");
+            removerCliente(listaC);
             break;
 
             case 6:
@@ -267,7 +328,6 @@ void modoComprador()
 
     }while(selecionarCompras!=4);
 }
-
 
 void menuPrincipal(int *i)
 {
