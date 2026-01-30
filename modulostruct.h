@@ -1,10 +1,14 @@
 #ifndef crudstruct
 #define crudstruct
-struct Pessoas
+
+#include <stdlib.h>
+
+typedef struct clientes
 {
-    char cpf[14];
-    char telefone[14];
+    char cpf[12];
+    char telefone[100];
     char *nome;
-};
+    struct clientes *prox;
+}Clientes;
 
 #endif

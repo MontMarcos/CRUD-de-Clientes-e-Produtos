@@ -12,7 +12,92 @@ void limpaBuffer()
 }
 
 
-void menuClientes()
+void nomeDinamico(Clientes *novo)
+{
+    int i=0;
+    char c;
+    novo->nome = NULL;
+    while(scanf("%c", &c)==1 && c!='\n')
+    {
+        char *temp = realloc(novo->nome, i+2);
+        if(temp == NULL)
+        {
+            free(novo->nome);
+            novo->nome = NULL;
+            return;
+        }
+        novo->nome = temp;
+        novo->nome[i++] = c;
+    };
+    if(novo->nome!=NULL)
+    {
+        novo->nome[i] = '\0';
+    }
+}
+
+
+Clientes * criarlistaClientes()
+{
+    Clientes *listaC;
+    listaC = malloc(sizeof(Clientes));
+    listaC->prox=NULL;
+
+    return listaC;
+};
+
+
+void cadastrarCliente(Clientes *listaC)
+{
+    Clientes *novo;
+    novo = malloc(sizeof(Clientes));
+    int j=0;
+    do
+    {
+        if(j==1)
+        {
+            printf("cpf invalido (menos de 11 digitos)");
+        }
+        j=0;
+        limpaBuffer();
+        printf("digite o Cpf:");
+        if(scanf("%11[0-9]", novo->cpf)!=1)
+        {
+            printf("CPF invalido\n");
+            novo->cpf[0]= '\0';
+            continue;
+        }
+        limpaBuffer();
+        j++;
+    }while(strlen(novo->cpf) != 11);
+
+        printf("digite o Nome:");
+        nomeDinamico(novo);
+        if(novo->nome == NULL)
+        {
+            printf("Erro ao ler nome\n");
+            free(novo);
+            return;
+        }
+        printf("digite o Telefone:");
+        scanf("%s", novo->telefone);
+        novo->prox=listaC->prox;
+        listaC->prox=novo;
+};
+
+void ListarCliente(Clientes *listaC)
+{
+    Clientes *imprime;
+    int i;
+    printf("\n");
+    for (imprime=listaC->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
+    {
+        printf("%d - %s\n",i, imprime->nome);
+    }
+    printf("\n");
+    return;
+};
+
+void menuClientes(Clientes *listaC)
 {
     int selecionarCliente;
     do
@@ -34,12 +119,11 @@ void menuClientes()
         switch (selecionarCliente)
         {
             case 1:
-            printf("bom dia 1\n");
+            cadastrarCliente(listaC);
             break;
 
             case 2:
-            printf("bom dia 2\n");
-
+            ListarCliente(listaC);
             break;
 
             case 3:
@@ -168,6 +252,7 @@ void modoComprador()
 void menuPrincipal(int *i)
 {
     int selecionar;
+    Clientes *listaC = criarlistaClientes();
     printf("Selecione sua opcao:\n");
     printf("1 - Clientes\n");
     printf("2 - Produtos\n");
@@ -183,7 +268,7 @@ void menuPrincipal(int *i)
     switch (selecionar)
         {
             case 1:
-            menuClientes();
+            menuClientes(listaC);
             break;
 
             case 2:
