@@ -44,6 +44,15 @@ Clientes * criarlistaClientes()
     return listaC;
 };
 
+Produtos * criarlistaProdutos()
+{
+    Produtos *listaP;
+    listaP = malloc(sizeof(Produtos));
+    listaP->prox=NULL;
+
+    return listaP;
+};
+
 //funções do cliente
 
 void cadastrarCliente(Clientes *listaC)
@@ -176,113 +185,227 @@ void removerCliente(Clientes *listaC)
     }
 }
 
+//funcoes do produto
+
+void cadastrarProduto(Produtos *listaP)
+{
+    Produtos *novo;
+    novo = malloc(sizeof(Produtos));
+    printf("digite o codigo do produto:");
+    if(scanf("%19s", novo->codigo)!=1)
+    {
+        printf("Codigo invalido\n");
+        free(novo);
+        return;
+    }
+
+    printf("digite o nome do produto:");
+    if(scanf("%99s", novo->nome)!=1)
+    {
+        printf("Nome invalido\n");
+        free(novo);
+        return;
+    }
+    printf("digite o preco do produto:");
+    scanf("%f", &novo->preco);
+
+    printf("digite a quantidade do produto:");
+    scanf("%d", &novo->quantidade);
+
+    novo->prox=listaP->prox;
+    listaP->prox=novo;
+}
+
+void listarProduto(Produtos *listaP)
+{
+    Produtos *imprime;
+    int i;
+    printf("\n");
+    for (imprime=listaP->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
+    {
+        printf("%d - %s - codigo: %s - preco: %.2f - quantidade: %d\n",i, imprime->nome, imprime->codigo, imprime->preco, imprime->quantidade);
+    }
+    printf("\n");
+    return;
+}
+
+void buscarProduto(Produtos *listaP)
+{
+    Produtos *busca;
+    char buscador[20];
+
+    printf("Digite o codigo do produto a ser buscado: ");
+    scanf("%19s", buscador);
+
+    busca = listaP->prox;
+
+    while (busca != NULL && strcmp(buscador, busca->codigo) != 0) {
+        busca = busca->prox;
+    }
+
+    if (busca == NULL) {
+        printf("Codigo nao encontrado\n");
+    } else {
+        printf("Codigo encontrado: %s\nnome: %s\npreco: %.2f\nquantidade: %d\n",
+               busca->codigo, busca->nome, busca->preco, busca->quantidade);
+    }
+}
+
+void editarProduto(Produtos *listaP)
+{
+    Produtos *atual = listaP->prox;
+    char buscador[20];
+    printf("Digite o codigo do produto a ser editado: ");
+    scanf("%19s", buscador);
+    while (atual != NULL && strcmp(buscador, atual->codigo) != 0) {
+        atual = atual->prox;
+    }
+    if (atual == NULL) {
+        printf("Codigo nao encontrado\n");
+    } else {
+        printf("Digite o novo nome do produto: ");
+        scanf("%99s", atual->nome);
+        printf("Digite o novo preco do produto: ");
+        scanf("%f", &atual->preco);
+        printf("Digite a nova quantidade do produto: ");
+        scanf("%d", &atual->quantidade);
+        printf("Produto editado com sucesso\n");
+    }
+}
+
+void removerProduto(Produtos *listaP)
+{
+    Produtos *atual = listaP;
+    Produtos *anterior = NULL;
+    char buscador[20];
+
+    printf("Digite o codigo do produto a ser removido: ");
+    scanf("%19s", buscador);
+
+    while (atual != NULL && strcmp(buscador, atual->codigo) != 0) {
+        anterior = atual;
+        atual = atual->prox;
+    }
+
+    if (atual == NULL) {
+        printf("Codigo nao encontrado\n");
+    } else {
+        if (anterior == NULL) {
+            listaP->prox = atual->prox;
+        } else {
+            anterior->prox = atual->prox;
+        }
+        free(atual);
+        printf("Produto removido com sucesso\n");
+    }
+}
+
 //funcoes do menu
 
 void menuClientes(Clientes *listaC)
 {
-    int selecionarCliente;
+    int selecionarClientes;
+
     do
     {
-        printf("1 - Cadastrar clientes\n");
+        printf("1 - Cadastrar cliente\n");
         printf("2 - Listar clientes\n");
-        printf("3 - Buscar clientes\n");
-        printf("4 - Editar clientes\n");
-        printf("5 - Remover clientes\n");
+        printf("3 - Buscar cliente\n");
+        printf("4 - Editar cliente\n");
+        printf("5 - Remover cliente\n");
         printf("6 - Retornar ao menu principal\n");
         printf("\n");
-        if (scanf("%d", &selecionarCliente) != 1)
+        if (scanf("%d", &selecionarClientes) != 1)
         {
             printf("Entrada invalida.\n");
             limpaBuffer();
-            selecionarCliente = -1;
+            selecionarClientes = -1;
             continue;
         }
-        switch (selecionarCliente)
-        {
-            case 1:
-            cadastrarCliente(listaC);
-            break;
+            switch (selecionarClientes)
+            {
+                case 1:
+                cadastrarCliente(listaC);
+                break;
 
-            case 2:
-            ListarCliente(listaC);
-            break;
+                case 2:
+                ListarCliente(listaC);
+                break;
 
-            case 3:
-            buscarCliente(listaC);
-            break;
+                case 3:
+                buscarCliente(listaC);
+                break;
 
-            case 4:
-            editarCliente(listaC);
-            break;
-            
-            case 5:
-            removerCliente(listaC);
-            break;
+                case 4:
+                editarCliente(listaC);
+                break;
 
-            case 6:
-            break;
+                case 5:
+                removerCliente(listaC);
+                break;
 
-            default:
-            printf("Comando nao encontrado\n");
-            break;
-        }
+                case 6:
+                break;
 
-    } while (selecionarCliente!= 6);
-    
+                default:
+                printf("Comando nao encontrado\n");
+                break;
+            }
+
+    }while(selecionarClientes!=6);
 }
 
-void menuProdutos()
+void menuProdutos(Produtos *listaP)
 {
-    int selecionarProduto;
+    int selecionarProdutos;
+
     do
     {
-        printf("1 - Cadastrar produtos\n");
+        printf("1 - Cadastrar produto\n");
         printf("2 - Listar produtos\n");
-        printf("3 - Buscar produtos\n");
-        printf("4 - Editar produtos\n");
-        printf("5 - Remover produtos\n");
+        printf("3 - Buscar produto\n");
+        printf("4 - Editar produto\n");
+        printf("5 - Remover produto\n");
         printf("6 - Retornar ao menu principal\n");
         printf("\n");
-
-        if (scanf("%d", &selecionarProduto) != 1)
+        if (scanf("%d", &selecionarProdutos) != 1)
         {
             printf("Entrada invalida.\n");
             limpaBuffer();
-            selecionarProduto = -1;
+            selecionarProdutos = -1;
             continue;
         }
+            switch (selecionarProdutos)
+            {
+                case 1:
+                cadastrarProduto(listaP);
+                break;
 
-        switch (selecionarProduto)
-        {
-            case 1:
-            printf("bom dia 1\n");
-            break;
+                case 2:
+                listarProduto(listaP);
+                break;
 
-            case 2:
-            printf("bom dia 2\n");
-            break;
+                case 3:
+                buscarProduto(listaP);
+                break;
 
-            case 3:
-            printf("bom dia 3\n");
-            break;
+                case 4:
+                editarProduto(listaP);
+                break;
 
-            case 4:
-            printf("bom dia 4\n");
-            break;
+                case 5:
+                removerProduto(listaP);
+                break;
 
-            case 5:
-            printf("bom dia 5\n");
-            break;
+                case 6:
+                break;
 
-            case 6:
-            break;
+                default:
+                printf("Comando nao encontrado\n");
+                break;
+            }
 
-            default:
-            printf("Comando nao encontrado\n");
-            break;
-        } 
-
-    } while (selecionarProduto!= 6);
+    }while(selecionarProdutos!=6);
 }
 
 void modoComprador()
@@ -333,6 +456,7 @@ void menuPrincipal(int *i)
 {
     int selecionar;
     Clientes *listaC = criarlistaClientes();
+    Produtos *listaP = criarlistaProdutos();
     printf("Selecione sua opcao:\n");
     printf("1 - Clientes\n");
     printf("2 - Produtos\n");
@@ -352,7 +476,7 @@ void menuPrincipal(int *i)
             break;
 
             case 2:
-            menuProdutos();
+            menuProdutos(listaP);
             break;
 
             case 3:

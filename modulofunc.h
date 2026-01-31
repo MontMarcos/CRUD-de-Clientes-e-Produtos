@@ -8,12 +8,23 @@
 
 void limpaBuffer();
 void nomeDinamico(Clientes *novo);
+
 Clientes * criarlistaClientes();
 void cadastrarCliente(Clientes *listaC);
 void ListarCliente(Clientes *listaC);
 void buscarCliente(Clientes *listaC);
 void menuClientes(Clientes *listaC);
-void menuProdutos();
+void editarCliente(Clientes *listaC);
+void removerCliente(Clientes *listaC);
+
+Produtos * criarlistaProdutos();
+void cadastrarProduto(Produtos *listaP);
+void ListarProduto(Produtos *listaP);
+void buscarProduto(Produtos *listaP);
+void editarProduto(Produtos *listaP);
+void removerProduto(Produtos *listaP);
+void menuProdutos(Produtos *listaP);
+
 void modoComprador();
 void menuPrincipal(int *i);
 
