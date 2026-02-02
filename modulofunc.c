@@ -59,8 +59,8 @@ void cadastrarCliente(Clientes *listaC)
 {
     Clientes *novo;
     novo = malloc(sizeof(Clientes));
+    printf("Insira os dados do cliente a ser cadastrado:\n");
     int j=0;
-    // refazer com fgets, com scanf ficou meio ruim
     do
     {
         if(j==1)
@@ -70,7 +70,7 @@ void cadastrarCliente(Clientes *listaC)
         j=0;
         limpaBuffer();
         printf("digite o Cpf:");
-        if(scanf("%11[0-9]", novo->cpf)!=1)
+        if(scanf(" %11[0-9]", novo->cpf)!=1)
         {
             printf("CPF invalido\n");
             novo->cpf[0]= '\0';
@@ -107,7 +107,7 @@ void ListarCliente(Clientes *listaC)
     return;
 };
 
-void buscarCliente(Clientes *listaC)
+Clientes * buscarCliente(Clientes *listaC)
 {
     Clientes *busca;
     char buscador[12];
@@ -121,39 +121,48 @@ void buscarCliente(Clientes *listaC)
         busca = busca->prox;
     }
 
-    if (busca == NULL) {
-        printf("Cpf nao encontrado\n");
-    } else {
-        printf("cpf encontrado: %s\nnome: %s\ntelefone: %s\n",
-               busca->cpf, busca->nome, busca->telefone);
-    }
+    return busca;
 }
 
 void editarCliente(Clientes *listaC)
 {
-    Clientes *atual = listaC->prox;
-    char buscador[12];
-
-    printf("Digite o cpf do cliente a ser editado: ");
-    scanf("%11s", buscador);
-
-    while (atual != NULL && strcmp(buscador, atual->cpf) != 0) {
-        atual = atual->prox;
-    }
+    Clientes *atual = buscarCliente(listaC);
 
     if (atual == NULL) {
         printf("Cpf nao encontrado\n");
-    } else {
-        printf("Digite o novo nome: ");
-        limpaBuffer();
+    } else 
+    {
+        int j=0;
+        printf("Edite os dados do cliente:\n");
+        do
+        {
+            if(j==1)
+            {
+                printf("cpf invalido (menos de 11 digitos)\n");
+            }
+            j=0;
+            limpaBuffer();
+            printf("digite o Cpf:");
+            if(scanf("%11[0-9]", atual->cpf)!=1)
+            {
+                printf("CPF invalido\n");
+                atual->cpf[0]= '\0';
+                continue;
+            }
+            limpaBuffer();
+            j++;
+        }while(strlen(atual->cpf) != 11);
+        free(atual->nome);
+        atual->nome = NULL;
+        printf("digite o novo Nome:");
         nomeDinamico(atual);
-        if (atual->nome == NULL) {
+        if(atual->nome == NULL)
+        {
             printf("Erro ao ler nome\n");
             return;
         }
-        printf("Digite o novo telefone: ");
+        printf("digite o novo Telefone:");
         scanf("%s", atual->telefone);
-        printf("Cliente editado com sucesso\n");
     }
 }
 
@@ -229,7 +238,7 @@ void listarProduto(Produtos *listaP)
     return;
 }
 
-void buscarProduto(Produtos *listaP)
+Produtos * buscarProduto(Produtos *listaP)
 {
     Produtos *busca;
     char buscador[20];
@@ -242,24 +251,12 @@ void buscarProduto(Produtos *listaP)
     while (busca != NULL && strcmp(buscador, busca->codigo) != 0) {
         busca = busca->prox;
     }
-
-    if (busca == NULL) {
-        printf("Codigo nao encontrado\n");
-    } else {
-        printf("Codigo encontrado: %s\nnome: %s\npreco: %.2f\nquantidade: %d\n",
-               busca->codigo, busca->nome, busca->preco, busca->quantidade);
-    }
+    return busca;
 }
 
 void editarProduto(Produtos *listaP)
 {
-    Produtos *atual = listaP->prox;
-    char buscador[20];
-    printf("Digite o codigo do produto a ser editado: ");
-    scanf("%19s", buscador);
-    while (atual != NULL && strcmp(buscador, atual->codigo) != 0) {
-        atual = atual->prox;
-    }
+    Produtos *atual = buscarProduto(listaP);
     if (atual == NULL) {
         printf("Codigo nao encontrado\n");
     } else {
@@ -305,7 +302,7 @@ void removerProduto(Produtos *listaP)
 void menuClientes(Clientes *listaC)
 {
     int selecionarClientes;
-
+    Clientes *buscaCl;
     do
     {
         printf("1 - Cadastrar cliente\n");
@@ -314,7 +311,6 @@ void menuClientes(Clientes *listaC)
         printf("4 - Editar cliente\n");
         printf("5 - Remover cliente\n");
         printf("6 - Retornar ao menu principal\n");
-        printf("\n");
         if (scanf("%d", &selecionarClientes) != 1)
         {
             printf("Entrada invalida.\n");
@@ -333,7 +329,15 @@ void menuClientes(Clientes *listaC)
                 break;
 
                 case 3:
-                buscarCliente(listaC);
+                buscaCl=buscarCliente(listaC);
+                    if (buscaCl == NULL) 
+                    {
+                        printf("Cpf nao encontrado\n");
+                    } 
+                    else 
+                    {
+                    printf("cpf encontrado: %s\nnome: %s\ntelefone: %s\n",buscaCl->cpf, buscaCl->nome, buscaCl->telefone);
+                    }
                 break;
 
                 case 4:
@@ -358,7 +362,7 @@ void menuClientes(Clientes *listaC)
 void menuProdutos(Produtos *listaP)
 {
     int selecionarProdutos;
-
+    Produtos *buscaPd;
     do
     {
         printf("1 - Cadastrar produto\n");
@@ -367,7 +371,6 @@ void menuProdutos(Produtos *listaP)
         printf("4 - Editar produto\n");
         printf("5 - Remover produto\n");
         printf("6 - Retornar ao menu principal\n");
-        printf("\n");
         if (scanf("%d", &selecionarProdutos) != 1)
         {
             printf("Entrada invalida.\n");
@@ -386,7 +389,15 @@ void menuProdutos(Produtos *listaP)
                 break;
 
                 case 3:
-                buscarProduto(listaP);
+                buscaPd = buscarProduto(listaP);
+                    if (buscaPd == NULL) 
+                    {
+                        printf("Codigo nao encontrado\n");
+                    } 
+                    else 
+                    {
+                        printf("Codigo encontrado: %s\nnome: %s\npreco: %.2f\nquantidade: %d\n",buscaPd->codigo, buscaPd->nome, buscaPd->preco, buscaPd->quantidade);
+                    }
                 break;
 
                 case 4:
@@ -419,7 +430,6 @@ void modoComprador()
         printf("2 - listar produtos no carrinho\n");
         printf("3 - Remover produtos do carrinho\n");
         printf("4 - Retornar ao menu principal\n");
-        printf("\n");
         if (scanf("%d", &selecionarCompras) != 1)
         {
             printf("Entrada invalida.\n");
@@ -452,17 +462,14 @@ void modoComprador()
     }while(selecionarCompras!=4);
 }
 
-void menuPrincipal(int *i)
+void menuPrincipal(int *i, Clientes *listaC ,Produtos *listaP)
 {
     int selecionar;
-    Clientes *listaC = criarlistaClientes();
-    Produtos *listaP = criarlistaProdutos();
     printf("Selecione sua opcao:\n");
     printf("1 - Clientes\n");
     printf("2 - Produtos\n");
     printf("3 - Modo Comprador\n");
     printf("4 - Sair.\n");
-    printf("\n");
     if (scanf("%d", &selecionar) != 1)
     {
         printf("Entrada invalida.\n");
