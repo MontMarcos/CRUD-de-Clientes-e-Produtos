@@ -34,11 +34,23 @@ void nomeDinamico(Clientes *novo)
         novo->nome[i] = '\0';
     }
 }
+Carrinho * criarCarrinho()
+{
+    Carrinho *carrinhoC;
+    carrinhoC = malloc(sizeof(Carrinho));
+    if(carrinhoC==NULL) return NULL;
+    carrinhoC->cliente=NULL;
+    carrinhoC->items=NULL;
+
+    return carrinhoC;
+};
+
 
 Clientes * criarlistaClientes()
 {
     Clientes *listaC;
     listaC = malloc(sizeof(Clientes));
+    if(listaC==NULL) return NULL;
     listaC->prox=NULL;
 
     return listaC;
@@ -48,6 +60,7 @@ Produtos * criarlistaProdutos()
 {
     Produtos *listaP;
     listaP = malloc(sizeof(Produtos));
+    if(listaP==NULL) return NULL;
     listaP->prox=NULL;
 
     return listaP;
@@ -107,14 +120,12 @@ void ListarCliente(Clientes *listaC)
     return;
 };
 
-Clientes * buscarCliente(Clientes *listaC)
+Clientes * buscarCliente(Clientes *listaC, int k)
 {
     Clientes *busca;
     char buscador[12];
-
-    printf("Digite o cpf a ser buscado: ");
+    if (k == 0) printf("Digite o cpf a ser buscado: ");
     scanf("%11s", buscador);
-
     busca = listaC->prox;
 
     while (busca != NULL && strcmp(buscador, busca->cpf) != 0) {
@@ -126,7 +137,7 @@ Clientes * buscarCliente(Clientes *listaC)
 
 void editarCliente(Clientes *listaC)
 {
-    Clientes *atual = buscarCliente(listaC);
+    Clientes *atual = buscarCliente(listaC,0);
 
     if (atual == NULL) {
         printf("Cpf nao encontrado\n");
@@ -296,7 +307,24 @@ void removerProduto(Produtos *listaP)
         printf("Produto removido com sucesso\n");
     }
 }
+//funcoes do carrinho
 
+void cadastrarCarrinho(Carrinho *carrinhoC, Clientes *listaC)
+{
+    Clientes *buscador;
+    ListarCliente(listaC);
+    printf("Digite o cpf do Cliente:");
+    buscador = buscarCliente(listaC,1);
+    if(buscador==NULL)
+    {
+        printf("cliente nao encontrado.");
+        return;
+    }
+    carrinhoC->cliente=buscador;
+    printf("\n");
+    printf("Carrinho cadastrado - cliente: %s\n",carrinhoC->cliente->nome);
+    printf("\n");
+}
 //funcoes do menu
 
 void menuClientes(Clientes *listaC)
@@ -329,7 +357,7 @@ void menuClientes(Clientes *listaC)
                 break;
 
                 case 3:
-                buscaCl=buscarCliente(listaC);
+                buscaCl=buscarCliente(listaC,0);
                     if (buscaCl == NULL) 
                     {
                         printf("Cpf nao encontrado\n");
@@ -419,17 +447,17 @@ void menuProdutos(Produtos *listaP)
     }while(selecionarProdutos!=6);
 }
 
-void modoComprador()
+void modoComprador(Carrinho *carrinhoC, Clientes *listaC, Produtos *listaP)
 {
     // rodar funcao de listar e escolher cliente
     int selecionarCompras;
-
     do
     {
-        printf("1 - Adicionar produto ao carrinho\n");
-        printf("2 - listar produtos no carrinho\n");
-        printf("3 - Remover produtos do carrinho\n");
-        printf("4 - Retornar ao menu principal\n");
+        printf("1 - Criar carrinho\n");
+        printf("2 - Adicionar produto ao carrinho\n");
+        printf("3 - listar produtos no carrinho\n");
+        printf("4 - Remover produtos do carrinho\n");
+        printf("5 - Retornar ao menu principal\n");
         if (scanf("%d", &selecionarCompras) != 1)
         {
             printf("Entrada invalida.\n");
@@ -440,11 +468,12 @@ void modoComprador()
             switch (selecionarCompras)
             {
                 case 1:
-                printf("bom dia 1\n");
+                cadastrarCarrinho(carrinhoC, listaC);
                 break;
 
                 case 2:
                 printf("bom dia 2\n");
+                // adicionar produto no carrinho com quantidade e remover a mesma quantidade do estoque
                 break;
 
                 case 3:
@@ -452,6 +481,11 @@ void modoComprador()
                 break;
 
                 case 4:
+                printf("bom dia 4\n");
+                // remover produto do carrinho com quantidade e adicionar a mesma quantidade no estoque
+                break;
+
+                case 5:
                 break;
 
                 default:
@@ -459,10 +493,10 @@ void modoComprador()
                 break;
             }
 
-    }while(selecionarCompras!=4);
+    }while(selecionarCompras!=5);
 }
 
-void menuPrincipal(int *i, Clientes *listaC ,Produtos *listaP)
+void menuPrincipal(int *i,Carrinho *carrinhoC, Clientes *listaC ,Produtos *listaP)
 {
     int selecionar;
     printf("Selecione sua opcao:\n");
@@ -487,7 +521,7 @@ void menuPrincipal(int *i, Clientes *listaC ,Produtos *listaP)
             break;
 
             case 3:
-            modoComprador();
+            modoComprador(carrinhoC, listaC, listaP);
             break;
 
             case 4:

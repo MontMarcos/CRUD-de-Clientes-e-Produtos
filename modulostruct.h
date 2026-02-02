@@ -20,4 +20,18 @@ typedef struct produtos
     struct produtos *prox;
 }Produtos;
 
+typedef struct produtosCarrinho
+{
+    Produtos *produto;
+    int quantidade;
+    struct produtosCarrinho *prox;
+    // usar para a lista encadeada de produtos dentro do carrinho
+}ProdutosCarrinho;
+
+typedef struct carrinho
+{
+    Clientes *cliente;
+    ProdutosCarrinho *items;
+}Carrinho;
+
 #endif
