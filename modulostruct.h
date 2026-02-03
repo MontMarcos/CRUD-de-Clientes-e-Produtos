@@ -25,7 +25,6 @@ typedef struct produtos
     struct produtos *prox;
 } Produtos;
 
-<<<<<<< Updated upstream
 typedef struct produtosCarrinho
 {
     Produtos *produto;
@@ -41,11 +40,3 @@ typedef struct carrinho
 }Carrinho;
 
 #endif
-=======
-typedef struct ProdutoCarrinho {
-    Produtos *produto;
-    struct ProdutoCarrinho *prox;
-} ProdutoCarrinho;
-
-#endif
->>>>>>> Stashed changes
