@@ -205,7 +205,7 @@ Clientes * buscarCliente(Clientes *listaC, int k)
         Clientes *busca;
         char buscador[12];
 
-        if (k == 0) printf("Digite o cpf a ser buscado: ");
+        if (k == 0) printf("Digite o cpf do cliente a ser buscado: ");
         scanf("%11s", buscador);
         limpaBuffer();
         
