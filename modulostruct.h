@@ -32,6 +32,7 @@ typedef struct carrinho
 {
     Clientes *cliente;
     ProdutosCarrinho *items;
+    struct carrinho *prox;
 }Carrinho;
 
 #endif
