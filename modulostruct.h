@@ -3,18 +3,13 @@
 
 #include <stdlib.h>
 
-typedef struct produtos Produtos;
-typedef struct ProdutoCarrinho ProdutoCarrinho;
 typedef struct clientes
 {
     char cpf[12];
     char telefone[100];
     char *nome;
-
-    ProdutoCarrinho *carrinho;
-
     struct clientes *prox;
-} Clientes;
+}Clientes;
 
 typedef struct produtos
 {
@@ -23,7 +18,7 @@ typedef struct produtos
     float preco;
     int quantidade;
     struct produtos *prox;
-} Produtos;
+}Produtos;
 
 typedef struct produtosCarrinho
 {
