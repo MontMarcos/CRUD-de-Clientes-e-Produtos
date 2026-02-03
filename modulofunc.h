@@ -7,6 +7,7 @@
 #include "modulostruct.h"
 
 void limpaBuffer();
+void limparTela();
 
 void nomeDinamicoCliente(Clientes *novo);
 Clientes * criarlistaClientes();
@@ -27,7 +28,9 @@ void menuProdutos(Produtos *listaP);
 void nomeDinamicoProdutos(Produtos *novo);
 
 Carrinhos * criarlistaCarrinhos();
-void cadastrarCarrinho(Carrinhos *listaCar, Clientes *listaC);
+void adicionarProdutoCarrinho(Clientes *listaC, Produtos *listaP);
+void listarCarrinhoCliente(Clientes *listaC);
+void removerProdutoCarrinho(Clientes *listaC);
 void modoComprador(Carrinhos *listaCar, Clientes *listaC, Produtos *listaP);
 
 void menuPrincipal(int *i,Carrinhos *listaCar,Clientes *listaC , Produtos *listaP);

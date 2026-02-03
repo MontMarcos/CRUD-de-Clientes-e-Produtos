@@ -12,6 +12,14 @@ void limpaBuffer()
     // usar sempre que depois do scanf quando for entrada para os menus.
 }
 
+void limparTela() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
 void nomeDinamicoCliente(Clientes *novo)
 {
     int i=0;
@@ -69,7 +77,6 @@ Carrinhos * criarlistaCarrinhos()
     return listaCar;
 };
 
-
 Clientes * criarlistaClientes()
 {
     Clientes *listaC;
@@ -126,10 +133,21 @@ void cadastrarCliente(Clientes *listaC)
             free(novo);
             return;
         }
-        printf("digite o Telefone:");
-        scanf("%s", novo->telefone);
-        novo->prox=listaC->prox;
-        listaC->prox=novo;
+    
+    printf("Digite o telefone: ");
+        if(scanf("%99s", novo->telefone)==1)
+        {
+            novo->prox=listaC->prox;
+            listaC->prox=novo;
+        }
+        else
+        {
+            printf("Telefone invalido\n");
+            free(novo->nome);
+            free(novo);
+            return;
+        }
+
 };
 
 void ListarCliente(Clientes *listaC)
@@ -380,6 +398,157 @@ void removerProduto(Produtos *listaP)
 }
 //funcoes do carrinho
 
+void adicionarProdutoCarrinho(Clientes *listaC, Produtos *listaP)
+{
+    Clientes *cliente = buscarCliente(listaC, 0);
+    if (cliente == NULL)
+    {
+        printf("Cliente nao encontrado\n");
+        return;
+    }
+
+    Produtos *produto = buscarProduto(listaP);
+    if (produto == NULL)
+    {
+        printf("Produto nao encontrado\n");
+        return;
+    }
+
+    int quantidade;
+    do
+    {
+        limpaBuffer();
+        printf("Digite a quantidade: ");
+        if (scanf("%d", &quantidade) != 1)
+        {
+            quantidade = -1;
+            continue;
+        }
+        if (quantidade <= 0)
+        {
+            printf("Quantidade deve ser positiva\n");
+            quantidade = -1;
+        }
+        else if (quantidade > produto->quantidade)
+        {
+            printf("Estoque insuficiente. Disponivel: %d\n", produto->quantidade);
+            quantidade = -1;
+        }
+    } while (quantidade == -1);
+
+    if (cliente->carrinhoC == NULL)
+    {
+        cliente->carrinhoC = criarlistaCarrinhos();
+    }
+
+    ProdutosCarrinho *item = cliente->carrinhoC->items;
+    while (item != NULL)
+    {
+        if (item->produto == produto)
+        {
+            item->quantidade += quantidade;
+            produto->quantidade -= quantidade;
+            printf("Quantidade atualizada no carrinho\n");
+            return;
+        }
+        item = item->prox;
+    }
+
+    ProdutosCarrinho *novoItem = malloc(sizeof(ProdutosCarrinho));
+    if (novoItem == NULL)
+    {
+        printf("Erro de alocacao\n");
+        return;
+    }
+    novoItem->produto = produto;
+    novoItem->quantidade = quantidade;
+    novoItem->prox = cliente->carrinhoC->items;
+    cliente->carrinhoC->items = novoItem;
+
+    produto->quantidade -= quantidade;
+    printf("Produto adicionado ao carrinho\n");
+}
+
+void listarCarrinhoCliente(Clientes *listaC)
+{
+    Clientes *cliente = buscarCliente(listaC, 0);
+    if (cliente == NULL)
+    {
+        printf("Cliente nao encontrado\n");
+        return;
+    }
+
+    if (cliente->carrinhoC == NULL || cliente->carrinhoC->items == NULL)
+    {
+        printf("Carrinho vazio\n");
+        return;
+    }
+
+    ProdutosCarrinho *item = cliente->carrinhoC->items;
+    float valorTotal = 0;
+    int qtdItens = 0;
+
+    printf("\n--- Carrinho de %s ---\n", cliente->nome);
+    while (item != NULL)
+    {
+        float subtotal = item->quantidade * item->produto->preco;
+        printf("Produto: %s | Qtd: %d | Preco Unit: %.2f | Subtotal: %.2f\n",
+               item->produto->nome, item->quantidade, item->produto->preco, subtotal);
+        valorTotal += subtotal;
+        qtdItens += item->quantidade;
+        item = item->prox;
+    }
+    printf("----------------------------\n");
+    printf("Total de Itens: %d\n", qtdItens);
+    printf("Valor Total da Compra: %.2f\n", valorTotal);
+}
+
+void removerProdutoCarrinho(Clientes *listaC)
+{
+    Clientes *cliente = buscarCliente(listaC, 0);
+    if (cliente == NULL)
+    {
+        printf("Cliente nao encontrado\n");
+        return;
+    }
+
+    if (cliente->carrinhoC == NULL || cliente->carrinhoC->items == NULL)
+    {
+        printf("Carrinho vazio\n");
+        return;
+    }
+
+    char codigo[20];
+    printf("Digite o codigo do produto a remover: ");
+    scanf("%19s", codigo);
+
+    ProdutosCarrinho *atual = cliente->carrinhoC->items;
+    ProdutosCarrinho *anterior = NULL;
+
+    while (atual != NULL)
+    {
+        if (strcmp(atual->produto->codigo, codigo) == 0)
+        {
+            atual->produto->quantidade += atual->quantidade;
+
+            if (anterior == NULL)
+            {
+                cliente->carrinhoC->items = atual->prox;
+            }
+            else
+            {
+                anterior->prox = atual->prox;
+            }
+            free(atual);
+            printf("Produto removido do carrinho\n");
+            return;
+        }
+        anterior = atual;
+        atual = atual->prox;
+    }
+    printf("Produto nao encontrado no carrinho\n");
+}
+
 
 //funcoes do menu
 
@@ -503,12 +672,12 @@ void menuProdutos(Produtos *listaP)
 
 void modoComprador(Carrinhos *listaCar, Clientes *listaC, Produtos *listaP)
 {
-    // rodar funcao de listar e escolher cliente
     int selecionarCompras;
     do
     {
+        printf("\n--- Modo Compras ---\n");
         printf("1 - Adicionar produto ao carrinho\n");
-        printf("2 - listar produtos no carrinho\n");
+        printf("2 - Listar produtos no carrinho\n");
         printf("3 - Remover produtos do carrinho\n");
         printf("4 - Retornar ao menu principal\n");
         if (scanf("%d", &selecionarCompras) != 1)
@@ -520,17 +689,15 @@ void modoComprador(Carrinhos *listaCar, Clientes *listaC, Produtos *listaP)
             switch (selecionarCompras)
             {
                 case 1:
-                printf("bom dia 1\n");
-                // remover produto do carrinho com quantidade e adicionar a mesma quantidade no estoque
+                adicionarProdutoCarrinho(listaC, listaP);
                 break;
 
                 case 2:
-                printf("bom dia 2\n");
+                listarCarrinhoCliente(listaC);
                 break;
 
                 case 3:
-                printf("bom dia 3\n");
-                // add produto no carrinho com quantidade e remover a mesma quantidade no estoque
+                removerProdutoCarrinho(listaC);
                 break;
 
                 case 4:
