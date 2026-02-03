@@ -12,7 +12,7 @@ void limpaBuffer()
     // usar sempre que depois do scanf quando for entrada para os menus.
 }
 
-void nomeDinamico(Clientes *novo)
+void nomeDinamicoCliente(Clientes *novo)
 {
     int i=0;
     char c;
@@ -33,16 +33,40 @@ void nomeDinamico(Clientes *novo)
     {
         novo->nome[i] = '\0';
     }
-}
-Carrinho * criarCarrinho()
-{
-    Carrinho *carrinhoC;
-    carrinhoC = malloc(sizeof(Carrinho));
-    if(carrinhoC==NULL) return NULL;
-    carrinhoC->cliente=NULL;
-    carrinhoC->items=NULL;
+};
 
-    return carrinhoC;
+void nomeDinamicoProduto(Produtos *novo)
+{
+    int i=0;
+    char c;
+    novo->nome = NULL;
+    while(scanf("%c", &c)==1 && c!='\n')
+    {
+        char *temp = realloc(novo->nome, i+2);
+        if(temp == NULL)
+        {
+            free(novo->nome);
+            novo->nome = NULL;
+            return;
+        }
+        novo->nome = temp;
+        novo->nome[i++] = c;
+    };
+    if(novo->nome!=NULL)
+    {
+        novo->nome[i] = '\0';
+    }
+};
+
+Carrinhos * criarlistaCarrinhos()
+{
+    Carrinhos *listaCar;
+    listaCar = malloc(sizeof(Carrinhos));
+    if(listaCar==NULL) return NULL;
+    listaCar->items=NULL;
+    listaCar->prox=NULL;
+
+    return listaCar;
 };
 
 
@@ -52,6 +76,7 @@ Clientes * criarlistaClientes()
     listaC = malloc(sizeof(Clientes));
     if(listaC==NULL) return NULL;
     listaC->prox=NULL;
+    listaC->carrinhoC=NULL;
 
     return listaC;
 };
@@ -94,7 +119,7 @@ void cadastrarCliente(Clientes *listaC)
     }while(strlen(novo->cpf) != 11);
 
         printf("digite o Nome:");
-        nomeDinamico(novo);
+        nomeDinamicoCliente(novo);
         if(novo->nome == NULL)
         {
             printf("Erro ao ler nome\n");
@@ -114,7 +139,7 @@ void ListarCliente(Clientes *listaC)
     printf("\n");
     for (imprime=listaC->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
     {
-        printf("%d - %s - cpf: %s - telefone: %s\n",i, imprime->nome, imprime->cpf, imprime->telefone);
+        printf("%d - Cliente: %s - cpf: %s - telefone: %s\n",i, imprime->nome, imprime->cpf, imprime->telefone);
     }
     printf("\n");
     return;
@@ -166,7 +191,7 @@ void editarCliente(Clientes *listaC)
         free(atual->nome);
         atual->nome = NULL;
         printf("digite o novo Nome:");
-        nomeDinamico(atual);
+        nomeDinamicoCliente(atual);
         if(atual->nome == NULL)
         {
             printf("Erro ao ler nome\n");
@@ -211,6 +236,12 @@ void cadastrarProduto(Produtos *listaP)
 {
     Produtos *novo;
     novo = malloc(sizeof(Produtos));
+
+    limpaBuffer();
+    
+    printf("digite o nome do produto:");
+    nomeDinamicoProduto(novo);
+
     printf("digite o codigo do produto:");
     if(scanf("%19s", novo->codigo)!=1)
     {
@@ -218,19 +249,28 @@ void cadastrarProduto(Produtos *listaP)
         free(novo);
         return;
     }
-
-    printf("digite o nome do produto:");
-    if(scanf("%99s", novo->nome)!=1)
+    do 
     {
-        printf("Nome invalido\n");
-        free(novo);
-        return;
-    }
-    printf("digite o preco do produto:");
-    scanf("%f", &novo->preco);
+        limpaBuffer();
+        printf("digite o preco do produto:");
+        if (scanf("%f", &novo->preco)!=1)
+        {
+            novo->preco=-1;
+            continue;
+        }
 
-    printf("digite a quantidade do produto:");
-    scanf("%d", &novo->quantidade);
+    }while(novo->preco==-1);   
+
+    do 
+    {
+        limpaBuffer();
+        printf("digite a quantidade do produto:");
+        if (scanf("%d", &novo->quantidade)!=1)
+        {
+            novo->quantidade=-1;
+            continue;
+        }
+    }while(novo->quantidade==-1); 
 
     novo->prox=listaP->prox;
     listaP->prox=novo;
@@ -243,7 +283,7 @@ void listarProduto(Produtos *listaP)
     printf("\n");
     for (imprime=listaP->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
     {
-        printf("%d - %s - codigo: %s - preco: %.2f - quantidade: %d\n",i, imprime->nome, imprime->codigo, imprime->preco, imprime->quantidade);
+        printf("%d - Produto: %s - codigo: %s - preco: %.2f - quantidade: %d\n",i, imprime->nome, imprime->codigo, imprime->preco, imprime->quantidade);
     }
     printf("\n");
     return;
@@ -267,17 +307,48 @@ Produtos * buscarProduto(Produtos *listaP)
 
 void editarProduto(Produtos *listaP)
 {
-    Produtos *atual = buscarProduto(listaP);
-    if (atual == NULL) {
+    Produtos *novo = buscarProduto(listaP);
+    if (novo == NULL) {
         printf("Codigo nao encontrado\n");
-    } else {
-        printf("Digite o novo nome do produto: ");
-        scanf("%99s", atual->nome);
-        printf("Digite o novo preco do produto: ");
-        scanf("%f", &atual->preco);
-        printf("Digite a nova quantidade do produto: ");
-        scanf("%d", &atual->quantidade);
-        printf("Produto editado com sucesso\n");
+    } 
+    else 
+    {
+
+        limpaBuffer();
+    
+        printf("digite o novo nome do produto:");
+        nomeDinamicoProduto(novo);
+
+        printf("digite o novo codigo do produto:");
+        if(scanf("%19s", novo->codigo)!=1)
+        {
+            printf("Codigo invalido\n");
+            free(novo);
+            return;
+        }
+        do 
+        {
+            limpaBuffer();
+            printf("digite o novo preco do produto:");
+            if (scanf("%f", &novo->preco)!=1)
+            {
+                novo->preco=-1;
+                continue;
+            }
+
+        }while(novo->preco==-1);   
+
+        do 
+        {
+            limpaBuffer();
+            printf("digite a nova quantidade do produto:");
+            if (scanf("%d", &novo->quantidade)!=1)
+            {
+                novo->quantidade=-1;
+                continue;
+            }
+
+        }while(novo->quantidade==-1); 
     }
 }
 
@@ -309,22 +380,7 @@ void removerProduto(Produtos *listaP)
 }
 //funcoes do carrinho
 
-void cadastrarCarrinho(Carrinho *carrinhoC, Clientes *listaC)
-{
-    Clientes *buscador;
-    ListarCliente(listaC);
-    printf("Digite o cpf do Cliente:");
-    buscador = buscarCliente(listaC,1);
-    if(buscador==NULL)
-    {
-        printf("cliente nao encontrado.");
-        return;
-    }
-    carrinhoC->cliente=buscador;
-    printf("\n");
-    printf("Carrinho cadastrado - cliente: %s\n",carrinhoC->cliente->nome);
-    printf("\n");
-}
+
 //funcoes do menu
 
 void menuClientes(Clientes *listaC)
@@ -341,7 +397,6 @@ void menuClientes(Clientes *listaC)
         printf("6 - Retornar ao menu principal\n");
         if (scanf("%d", &selecionarClientes) != 1)
         {
-            printf("Entrada invalida.\n");
             limpaBuffer();
             selecionarClientes = -1;
             continue;
@@ -401,7 +456,6 @@ void menuProdutos(Produtos *listaP)
         printf("6 - Retornar ao menu principal\n");
         if (scanf("%d", &selecionarProdutos) != 1)
         {
-            printf("Entrada invalida.\n");
             limpaBuffer();
             selecionarProdutos = -1;
             continue;
@@ -447,20 +501,18 @@ void menuProdutos(Produtos *listaP)
     }while(selecionarProdutos!=6);
 }
 
-void modoComprador(Carrinho *carrinhoC, Clientes *listaC, Produtos *listaP)
+void modoComprador(Carrinhos *listaCar, Clientes *listaC, Produtos *listaP)
 {
     // rodar funcao de listar e escolher cliente
     int selecionarCompras;
     do
     {
-        printf("1 - Criar carrinho\n");
-        printf("2 - Adicionar produto ao carrinho\n");
-        printf("3 - listar produtos no carrinho\n");
-        printf("4 - Remover produtos do carrinho\n");
-        printf("5 - Retornar ao menu principal\n");
+        printf("1 - Adicionar produto ao carrinho\n");
+        printf("2 - listar produtos no carrinho\n");
+        printf("3 - Remover produtos do carrinho\n");
+        printf("4 - Retornar ao menu principal\n");
         if (scanf("%d", &selecionarCompras) != 1)
         {
-            printf("Entrada invalida.\n");
             limpaBuffer();
             selecionarCompras = -1;
             continue;
@@ -468,24 +520,20 @@ void modoComprador(Carrinho *carrinhoC, Clientes *listaC, Produtos *listaP)
             switch (selecionarCompras)
             {
                 case 1:
-                cadastrarCarrinho(carrinhoC, listaC);
+                printf("bom dia 1\n");
+                // remover produto do carrinho com quantidade e adicionar a mesma quantidade no estoque
                 break;
 
                 case 2:
                 printf("bom dia 2\n");
-                // adicionar produto no carrinho com quantidade e remover a mesma quantidade do estoque
                 break;
 
                 case 3:
                 printf("bom dia 3\n");
+                // add produto no carrinho com quantidade e remover a mesma quantidade no estoque
                 break;
 
                 case 4:
-                printf("bom dia 4\n");
-                // remover produto do carrinho com quantidade e adicionar a mesma quantidade no estoque
-                break;
-
-                case 5:
                 break;
 
                 default:
@@ -493,20 +541,19 @@ void modoComprador(Carrinho *carrinhoC, Clientes *listaC, Produtos *listaP)
                 break;
             }
 
-    }while(selecionarCompras!=5);
+    }while(selecionarCompras!=4);
 }
 
-void menuPrincipal(int *i,Carrinho *carrinhoC, Clientes *listaC ,Produtos *listaP)
+void menuPrincipal(int *i,Carrinhos *listaCar, Clientes *listaC ,Produtos *listaP)
 {
     int selecionar;
     printf("Selecione sua opcao:\n");
     printf("1 - Clientes\n");
     printf("2 - Produtos\n");
-    printf("3 - Modo Comprador\n");
+    printf("3 - Modo Compras\n");
     printf("4 - Sair.\n");
     if (scanf("%d", &selecionar) != 1)
     {
-        printf("Entrada invalida.\n");
         limpaBuffer();
         selecionar = -1;
     }
@@ -521,7 +568,7 @@ void menuPrincipal(int *i,Carrinho *carrinhoC, Clientes *listaC ,Produtos *lista
             break;
 
             case 3:
-            modoComprador(carrinhoC, listaC, listaP);
+            modoComprador(listaCar, listaC, listaP);
             break;
 
             case 4:

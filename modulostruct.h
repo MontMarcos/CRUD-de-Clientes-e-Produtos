@@ -3,18 +3,10 @@
 
 #include <stdlib.h>
 
-typedef struct clientes
-{
-    char cpf[12];
-    char telefone[100];
-    char *nome;
-    struct clientes *prox;
-}Clientes;
-
 typedef struct produtos
 {
     char codigo[20];
-    char nome[100];
+    char *nome;
     float preco;
     int quantidade;
     struct produtos *prox;
@@ -28,11 +20,21 @@ typedef struct produtosCarrinho
     // usar para a lista encadeada de produtos dentro do carrinho
 }ProdutosCarrinho;
 
-typedef struct carrinho
+typedef struct carrinhos
 {
-    Clientes *cliente;
     ProdutosCarrinho *items;
-    struct carrinho *prox;
-}Carrinho;
+    struct carrinhos *prox;
+}Carrinhos;
+
+typedef struct clientes
+{
+    char cpf[12];
+    char telefone[100];
+    char *nome;
+    struct clientes *prox;
+    Carrinhos *carrinhoC;
+}Clientes;
+
+
 
 #endif
