@@ -309,7 +309,6 @@ void removerProduto(Produtos *listaP)
 }
 //funcoes do carrinho
 
-<<<<<<< Updated upstream
 void cadastrarCarrinho(Carrinho *carrinhoC, Clientes *listaC)
 {
     Clientes *buscador;
@@ -326,145 +325,6 @@ void cadastrarCarrinho(Carrinho *carrinhoC, Clientes *listaC)
     printf("Carrinho cadastrado - cliente: %s\n",carrinhoC->cliente->nome);
     printf("\n");
 }
-=======
-//funcoes do comprador
-
-void incluirProdutoCarrinho(Produtos *listaP, Clientes *listaC)
-{
-    Produtos *buscaP;
-    Clientes *buscaC;
-    char buscadorP[20];
-    char buscadorC[12];
-
-    printf("Digite o CPF do cliente: ");
-    scanf("%11s", buscadorC);
-
-    buscaC = listaC->prox;
-    while (buscaC && strcmp(buscadorC, buscaC->cpf) != 0)
-        buscaC = buscaC->prox;
-
-    if (!buscaC) {
-        printf("Cliente nao encontrado.\n");
-        return;
-    }
-
-    printf("Digite o codigo do produto: ");
-    scanf("%19s", buscadorP);
-
-    buscaP = listaP->prox;
-    while (buscaP && strcmp(buscadorP, buscaP->codigo) != 0)
-        buscaP = buscaP->prox;
-
-    if (!buscaP) {
-        printf("Produto nao encontrado.\n");
-        return;
-    }
-
-    ProdutoCarrinho *novo = malloc(sizeof(ProdutoCarrinho));
-    if (!novo) {
-        printf("Erro de memoria.\n");
-        return;
-    }
-
-    novo->produto = buscaP;
-    novo->prox = buscaC->carrinho;
-    buscaC->carrinho = novo;
-
-    printf("Produto '%s' adicionado ao carrinho de %s.\n",
-           buscaP->nome, buscaC->nome);
-}
-
-void listarProdutosCarrinho(Produtos *listaP, Clientes *listaC)
-{
-    char cpf[12];
-    Clientes *buscaC;
-
-    printf("Digite o CPF do cliente: ");
-    scanf("%11s", cpf);
-
-    buscaC = listaC->prox;
-    while (buscaC && strcmp(cpf, buscaC->cpf) != 0)
-        buscaC = buscaC->prox;
-
-    if (!buscaC) {
-        printf("Cliente nao encontrado.\n");
-        return;
-    }
-
-    ProdutoCarrinho *aux = buscaC->carrinho;
-
-    if (!aux) {
-        printf("Carrinho vazio.\n");
-        return;
-    }
-
-    printf("\nCarrinho de %s:\n", buscaC->nome);
-
-    float total = 0;
-
-    while (aux) {
-        printf("- %s | R$ %.2f\n",
-               aux->produto->nome,
-               aux->produto->preco);
-
-        total += aux->produto->preco;
-        aux = aux->prox;
-    }
-
-    printf("Total: R$ %.2f\n", total);
-}
-
-void retirarProdutoCarrinho(Produtos *listaP, Clientes *listaC)
-{
-    char cpf[12];
-    char codigo[20];
-
-    Clientes *buscaC;
-
-    printf("Digite o CPF do cliente: ");
-    scanf("%11s", cpf);
-
-    buscaC = listaC->prox;
-    while (buscaC && strcmp(cpf, buscaC->cpf) != 0)
-        buscaC = buscaC->prox;
-
-    if (!buscaC) {
-        printf("Cliente nao encontrado.\n");
-        return;
-    }
-
-    if (!buscaC->carrinho) {
-        printf("Carrinho vazio.\n");
-        return;
-    }
-
-    printf("Digite o codigo do produto para remover: ");
-    scanf("%19s", codigo);
-
-    ProdutoCarrinho *atual = buscaC->carrinho;
-    ProdutoCarrinho *anterior = NULL;
-
-    while (atual && strcmp(atual->produto->codigo, codigo) != 0) {
-        anterior = atual;
-        atual = atual->prox;
-    }
-
-    if (!atual) {
-        printf("Produto nao esta no carrinho.\n");
-        return;
-    }
-
-    if (!anterior)
-        buscaC->carrinho = atual->prox;
-    else
-        anterior->prox = atual->prox;
-
-    free(atual);
-
-    printf("Produto removido do carrinho.\n");
-}
-
->>>>>>> Stashed changes
 //funcoes do menu
 
 void menuClientes(Clientes *listaC)
@@ -587,11 +447,7 @@ void menuProdutos(Produtos *listaP)
     }while(selecionarProdutos!=6);
 }
 
-<<<<<<< Updated upstream
 void modoComprador(Carrinho *carrinhoC, Clientes *listaC, Produtos *listaP)
-=======
-void modoComprador(Produtos *listaP, Clientes *listaC)
->>>>>>> Stashed changes
 {
     // rodar funcao de listar e escolher cliente
     int selecionarCompras;
@@ -612,24 +468,16 @@ void modoComprador(Produtos *listaP, Clientes *listaC)
             switch (selecionarCompras)
             {
                 case 1:
-<<<<<<< Updated upstream
                 cadastrarCarrinho(carrinhoC, listaC);
                 break;
 
                 case 2:
                 printf("bom dia 2\n");
                 // adicionar produto no carrinho com quantidade e remover a mesma quantidade do estoque
-=======
-                incluirProdutoCarrinho(listaP, listaC);
-                break;
-
-                case 2:
-                listarProdutosCarrinho(listaP, listaC);
->>>>>>> Stashed changes
                 break;
 
                 case 3:
-                retirarProdutoCarrinho(listaP, listaC);
+                printf("bom dia 3\n");
                 break;
 
                 case 4:
@@ -673,11 +521,7 @@ void menuPrincipal(int *i,Carrinho *carrinhoC, Clientes *listaC ,Produtos *lista
             break;
 
             case 3:
-<<<<<<< Updated upstream
             modoComprador(carrinhoC, listaC, listaP);
-=======
-            modoComprador(listaP, listaC);
->>>>>>> Stashed changes
             break;
 
             case 4:

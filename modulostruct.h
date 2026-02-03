@@ -3,18 +3,13 @@
 
 #include <stdlib.h>
 
-typedef struct produtos Produtos;
-typedef struct ProdutoCarrinho ProdutoCarrinho;
 typedef struct clientes
 {
     char cpf[12];
     char telefone[100];
     char *nome;
-
-    ProdutoCarrinho *carrinho;
-
     struct clientes *prox;
-} Clientes;
+}Clientes;
 
 typedef struct produtos
 {
@@ -23,9 +18,8 @@ typedef struct produtos
     float preco;
     int quantidade;
     struct produtos *prox;
-} Produtos;
+}Produtos;
 
-<<<<<<< Updated upstream
 typedef struct produtosCarrinho
 {
     Produtos *produto;
@@ -41,11 +35,3 @@ typedef struct carrinho
 }Carrinho;
 
 #endif
-=======
-typedef struct ProdutoCarrinho {
-    Produtos *produto;
-    struct ProdutoCarrinho *prox;
-} ProdutoCarrinho;
-
-#endif
->>>>>>> Stashed changes
