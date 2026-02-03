@@ -25,10 +25,18 @@ void editarProduto(Produtos *listaP);
 void removerProduto(Produtos *listaP);
 void menuProdutos(Produtos *listaP);
 
+<<<<<<< Updated upstream
 Carrinho * criarCarrinho();
 void cadastrarCarrinho(Carrinho *carrinhoC, Clientes *listaC);
 void modoComprador(Carrinho *carrinhoC, Clientes *listaC, Produtos *listaP);
 
 void menuPrincipal(int *i,Carrinho *carrinhoC,Clientes *listaC , Produtos *listaP);
+=======
+void modoComprador(Produtos *listaP, Clientes *listaC);
+void incluirProdutoCarrinho(Produtos *listaP, Clientes *listaC);
+void listarProdutosCarrinho(Produtos *listaP, Clientes *listaC);
+void retirarProdutoCarrinho(Produtos *listaP, Clientes *listaC);
+void menuPrincipal(int *i);
+>>>>>>> Stashed changes
 
 #endif
