@@ -103,29 +103,30 @@ Produtos * criarlistaProdutos()
 void cadastrarCliente(Clientes *listaC)
 {
     Clientes *novo;
-    novo = malloc(sizeof(Clientes));
-    printf("Insira os dados do cliente a ser cadastrado:\n");
-    int j=0;
-    do
-    {
-        if(j==1)
-        {
-            printf("cpf invalido (menos de 11 digitos)");
-        }
-        j=0;
-        limpaBuffer();
-        printf("digite o Cpf:");
-        if(scanf(" %11[0-9]", novo->cpf)!=1)
-        {
-            printf("CPF invalido\n");
-            novo->cpf[0]= '\0';
-            continue;
-        }
-        limpaBuffer();
-        j++;
-    }while(strlen(novo->cpf) != 11);
+        novo = malloc(sizeof(Clientes));
+        printf("Insira os dados do cliente a ser cadastrado:\n");
 
-        printf("digite o Nome:");
+        int j = 0;
+        do
+        {
+            if(j == 1)
+            {
+                printf("cpf invalido (menos de 11 digitos)\n");
+            }
+            j = 0;
+            limpaBuffer();
+            printf("digite o Cpf: ");
+            if(scanf(" %11[0-9]", novo->cpf) != 1)
+            {
+                printf("CPF invalido\n");
+                novo->cpf[0] = '\0';
+                continue;
+            }
+            limpaBuffer();
+            j++;
+        } while(strlen(novo->cpf) != 11);
+
+        printf("digite o Nome: ");
         nomeDinamicoCliente(novo);
         if(novo->nome == NULL)
         {
@@ -133,28 +134,58 @@ void cadastrarCliente(Clientes *listaC)
             free(novo);
             return;
         }
-    
-    printf("Digite o telefone: ");
-        if(scanf("%99s", novo->telefone)==1)
+        
+    int telefoneValido = 0;
+        do
         {
-            novo->prox=listaC->prox;
-            listaC->prox=novo;
-        }
-        else
-        {
-            printf("Telefone invalido\n");
-            free(novo->nome);
-            free(novo);
-            return;
-        }
+            printf("Digite o telefone (11 numeros): ");
+            scanf("%s", novo->telefone);
+            limpaBuffer(); 
 
+            int erro = 0;
+
+            if (strlen(novo->telefone) != 11)
+            {
+                erro = 1;
+            }
+            else
+            {
+                for (int i = 0; i < 11; i++)
+                {
+                    if (novo->telefone[i] < '0' || novo->telefone[i] > '9')
+                    {
+                        erro = 1;
+                        break;
+                    }
+                }
+            }
+
+            if (erro)
+            {
+                printf("Ocorreu um erro no telefone.\n");
+            }
+            else
+            {
+                telefoneValido = 1;
+            }
+
+        } while (!telefoneValido);
+
+        novo->prox = listaC->prox;
+        listaC->prox = novo;
 };
 
 void ListarCliente(Clientes *listaC)
 {
     Clientes *imprime;
     int i;
+
     printf("\n");
+    if(listaC->prox == NULL)
+    {
+        printf("Nenhum cliente cadastrado\n\n");
+        return;
+    }
     for (imprime=listaC->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
     {
         printf("%d - Cliente: %s - cpf: %s - telefone: %s\n",i, imprime->nome, imprime->cpf, imprime->telefone);
@@ -165,11 +196,20 @@ void ListarCliente(Clientes *listaC)
 
 Clientes * buscarCliente(Clientes *listaC, int k)
 {
-    Clientes *busca;
-    char buscador[12];
-    if (k == 0) printf("Digite o cpf a ser buscado: ");
-    scanf("%11s", buscador);
-    busca = listaC->prox;
+    if(listaC->prox == NULL)
+    {
+        printf("Nenhum cliente cadastrado\n");
+        return NULL;
+    }
+
+        Clientes *busca;
+        char buscador[12];
+
+        if (k == 0) printf("Digite o cpf a ser buscado: ");
+        scanf("%11s", buscador);
+        limpaBuffer();
+        
+        busca = listaC->prox;
 
     while (busca != NULL && strcmp(buscador, busca->cpf) != 0) {
         busca = busca->prox;
@@ -180,6 +220,11 @@ Clientes * buscarCliente(Clientes *listaC, int k)
 
 void editarCliente(Clientes *listaC)
 {
+    if(listaC->prox == NULL)
+    {
+        printf("Nenhum cliente cadastrado\n");
+        return;
+    }
     Clientes *atual = buscarCliente(listaC,0);
 
     if (atual == NULL) {
@@ -222,6 +267,11 @@ void editarCliente(Clientes *listaC)
 
 void removerCliente(Clientes *listaC)
 {
+    if(listaC->prox == NULL)
+    {
+        printf("Nenhum cliente cadastrado\n");
+        return;
+    }
     Clientes *atual = listaC;
     Clientes *anterior = NULL;
     char buscador[12];
@@ -297,6 +347,11 @@ void cadastrarProduto(Produtos *listaP)
 void listarProduto(Produtos *listaP)
 {
     Produtos *imprime;
+    if(listaP->prox == NULL)
+    {
+        printf("Nenhum produto cadastrado\n\n");
+        return;
+    }
     int i;
     printf("\n");
     for (imprime=listaP->prox,i = 1;imprime!=NULL;imprime = imprime->prox, i++)
@@ -309,11 +364,17 @@ void listarProduto(Produtos *listaP)
 
 Produtos * buscarProduto(Produtos *listaP)
 {
+    if(listaP->prox == NULL)
+    {
+        printf("Nenhum produto cadastrado\n");
+        return NULL;
+    }
     Produtos *busca;
     char buscador[20];
 
     printf("Digite o codigo do produto a ser buscado: ");
     scanf("%19s", buscador);
+    limpaBuffer();
 
     busca = listaP->prox;
 
@@ -325,6 +386,11 @@ Produtos * buscarProduto(Produtos *listaP)
 
 void editarProduto(Produtos *listaP)
 {
+    if(listaP->prox == NULL)
+    {
+        printf("Nenhum produto cadastrado\n");
+        return;
+    }
     Produtos *novo = buscarProduto(listaP);
     if (novo == NULL) {
         printf("Codigo nao encontrado\n");
@@ -372,6 +438,11 @@ void editarProduto(Produtos *listaP)
 
 void removerProduto(Produtos *listaP)
 {
+    if(listaP->prox == NULL)
+    {
+        printf("Nenhum produto cadastrado\n");
+        return;
+    }
     Produtos *atual = listaP;
     Produtos *anterior = NULL;
     char buscador[20];
@@ -400,6 +471,11 @@ void removerProduto(Produtos *listaP)
 
 void adicionarProdutoCarrinho(Clientes *listaC, Produtos *listaP)
 {
+    if(listaC->prox == NULL)
+    {
+        printf("Nenhum cliente cadastrado\n");
+        return;
+    }
     Clientes *cliente = buscarCliente(listaC, 0);
     if (cliente == NULL)
     {
@@ -471,6 +547,11 @@ void adicionarProdutoCarrinho(Clientes *listaC, Produtos *listaP)
 
 void listarCarrinhoCliente(Clientes *listaC)
 {
+    if(listaC->prox == NULL)
+    {
+        printf("Nenhum cliente cadastrado\n");
+        return;
+    }
     Clientes *cliente = buscarCliente(listaC, 0);
     if (cliente == NULL)
     {
@@ -505,6 +586,11 @@ void listarCarrinhoCliente(Clientes *listaC)
 
 void removerProdutoCarrinho(Clientes *listaC)
 {
+    if(listaC->prox == NULL)
+    {
+        printf("Nenhum cliente cadastrado\n");
+        return;
+    }
     Clientes *cliente = buscarCliente(listaC, 0);
     if (cliente == NULL)
     {
@@ -556,6 +642,9 @@ void menuClientes(Clientes *listaC)
 {
     int selecionarClientes;
     Clientes *buscaCl;
+    
+    limparTela(); 
+
     do
     {
         printf("1 - Cadastrar cliente\n");
@@ -564,57 +653,74 @@ void menuClientes(Clientes *listaC)
         printf("4 - Editar cliente\n");
         printf("5 - Remover cliente\n");
         printf("6 - Retornar ao menu principal\n");
+        
         if (scanf("%d", &selecionarClientes) != 1)
         {
             limpaBuffer();
             selecionarClientes = -1;
             continue;
         }
-            switch (selecionarClientes)
-            {
-                case 1:
+
+        switch (selecionarClientes)
+        {
+            case 1:
+                limparTela();
                 cadastrarCliente(listaC);
                 break;
 
-                case 2:
+            case 2:
+                limparTela();
                 ListarCliente(listaC);
                 break;
 
-                case 3:
-                buscaCl=buscarCliente(listaC,0);
+            case 3:
+                limparTela();
+                if (listaC->prox == NULL) {
+                    printf("Nenhum cliente cadastrado\n");
+                }
+                else {
+                    buscaCl = buscarCliente(listaC, 0); 
+                    
                     if (buscaCl == NULL) 
                     {
                         printf("Cpf nao encontrado\n");
                     } 
                     else 
                     {
-                    printf("cpf encontrado: %s\nnome: %s\ntelefone: %s\n",buscaCl->cpf, buscaCl->nome, buscaCl->telefone);
+                        printf("CPF encontrado: %s\nNome: %s\nTelefone: %s\n", buscaCl->cpf, buscaCl->nome, buscaCl->telefone);
                     }
+                }
                 break;
 
-                case 4:
+            case 4:
+                limparTela();
                 editarCliente(listaC);
                 break;
 
-                case 5:
+            case 5:
+                limparTela();
                 removerCliente(listaC);
                 break;
 
-                case 6:
+            case 6:
+                limparTela();
                 break;
 
-                default:
+            default:
                 printf("Comando nao encontrado\n");
                 break;
-            }
+        }
 
-    }while(selecionarClientes!=6);
+    } while(selecionarClientes != 6);
 }
 
 void menuProdutos(Produtos *listaP)
 {
     int selecionarProdutos;
     Produtos *buscaPd;
+    
+    limparTela();
+
     do
     {
         printf("1 - Cadastrar produto\n");
@@ -623,132 +729,161 @@ void menuProdutos(Produtos *listaP)
         printf("4 - Editar produto\n");
         printf("5 - Remover produto\n");
         printf("6 - Retornar ao menu principal\n");
+        
         if (scanf("%d", &selecionarProdutos) != 1)
         {
             limpaBuffer();
             selecionarProdutos = -1;
             continue;
         }
-            switch (selecionarProdutos)
-            {
-                case 1:
+
+        switch (selecionarProdutos)
+        {
+            case 1:
+                limparTela();
                 cadastrarProduto(listaP);
                 break;
 
-                case 2:
+            case 2:
+                limparTela();
                 listarProduto(listaP);
                 break;
 
-                case 3:
-                buscaPd = buscarProduto(listaP);
+            case 3:
+                limparTela();
+                if (listaP->prox == NULL) 
+                {
+                    printf("Nenhum produto cadastrado\n");
+                } 
+                else 
+                {
+                    buscaPd = buscarProduto(listaP);
+                    
                     if (buscaPd == NULL) 
                     {
                         printf("Codigo nao encontrado\n");
                     } 
                     else 
                     {
-                        printf("Codigo encontrado: %s\nnome: %s\npreco: %.2f\nquantidade: %d\n",buscaPd->codigo, buscaPd->nome, buscaPd->preco, buscaPd->quantidade);
+                        printf("Codigo encontrado: %s\nNome: %s\nPreco: %.2f\nQuantidade: %d\n", 
+                            buscaPd->codigo, buscaPd->nome, buscaPd->preco, buscaPd->quantidade);
                     }
+                }
                 break;
 
-                case 4:
+            case 4:
+                limparTela();
                 editarProduto(listaP);
                 break;
 
-                case 5:
+            case 5:
+                limparTela();
                 removerProduto(listaP);
                 break;
 
-                case 6:
+            case 6:
+                limparTela();
                 break;
 
-                default:
+            default:
                 printf("Comando nao encontrado\n");
                 break;
-            }
+        }
 
-    }while(selecionarProdutos!=6);
+    } while(selecionarProdutos != 6);
 }
 
 void modoComprador(Carrinhos *listaCar, Clientes *listaC, Produtos *listaP)
 {
     int selecionarCompras;
+    
+    limparTela();
+
     do
     {
-        printf("\n--- Modo Compras ---\n");
         printf("1 - Adicionar produto ao carrinho\n");
         printf("2 - Listar produtos no carrinho\n");
         printf("3 - Remover produtos do carrinho\n");
         printf("4 - Retornar ao menu principal\n");
+        
         if (scanf("%d", &selecionarCompras) != 1)
         {
             limpaBuffer();
             selecionarCompras = -1;
             continue;
         }
-            switch (selecionarCompras)
-            {
-                case 1:
+
+        switch (selecionarCompras)
+        {
+            case 1:
+                limparTela();
                 adicionarProdutoCarrinho(listaC, listaP);
                 break;
 
-                case 2:
+            case 2:
+                limparTela();
                 listarCarrinhoCliente(listaC);
                 break;
 
-                case 3:
+            case 3:
+                limparTela();
                 removerProdutoCarrinho(listaC);
                 break;
 
-                case 4:
+            case 4:
+                limparTela();
                 break;
 
-                default:
+            default:
                 printf("Comando nao encontrado\n");
                 break;
-            }
+        }
 
-    }while(selecionarCompras!=4);
+    } while(selecionarCompras != 4);
 }
 
-void menuPrincipal(int *i,Carrinhos *listaCar, Clientes *listaC ,Produtos *listaP)
+void menuPrincipal(int *i, Carrinhos *listaCar, Clientes *listaC, Produtos *listaP)
 {
     int selecionar;
+    
+    limparTela();
+
     printf("Selecione sua opcao:\n");
     printf("1 - Clientes\n");
     printf("2 - Produtos\n");
     printf("3 - Modo Compras\n");
     printf("4 - Sair.\n");
+    
     if (scanf("%d", &selecionar) != 1)
     {
         limpaBuffer();
         selecionar = -1;
     }
+
     switch (selecionar)
-        {
-            case 1:
+    {
+        case 1:
             menuClientes(listaC);
             break;
 
-            case 2:
+        case 2:
             menuProdutos(listaP);
             break;
 
-            case 3:
+        case 3:
             modoComprador(listaCar, listaC, listaP);
             break;
 
-            case 4:
+        case 4:
+            limparTela();
             printf("Saindo do menu\n");
-            *i=1;
+            *i = 1;
             return;
 
-            default:
+        default:
             printf("Comando nao encontrado\n");
             break;
-        }
-    
+    }
 }
-
 
 //funcoes final
