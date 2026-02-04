@@ -23,7 +23,6 @@ typedef struct produtosCarrinho
 typedef struct carrinhos
 {
     ProdutosCarrinho *items;
-    struct carrinhos *prox;
 }Carrinhos;
 
 typedef struct clientes
