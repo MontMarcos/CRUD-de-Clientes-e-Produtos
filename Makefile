@@ -2,7 +2,7 @@ CC = gcc
 
 CFLAGS = -Wall
 
-TARGET = puta
+TARGET = main
 
 SRCS = main.c modulofunc.c
 
