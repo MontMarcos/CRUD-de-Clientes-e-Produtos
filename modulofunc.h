@@ -9,6 +9,9 @@
 void limpaBuffer();
 void limparTela();
 
+void liberarMemoriaCarrinho(Carrinhos *carrinhoC);
+void liberarMemoriaClientes(Clientes *listaC);
+void liberarMemoriaProdutos(Produtos *listaP);
 void nomeDinamicoCliente(Clientes *novo);
 Clientes * criarlistaClientes();
 void cadastrarCliente(Clientes *listaC);
@@ -21,18 +24,18 @@ void removerCliente(Clientes *listaC);
 Produtos * criarlistaProdutos();
 void cadastrarProduto(Produtos *listaP);
 void listarProduto(Produtos *listaP);
-Produtos * buscarProduto(Produtos *listaP);
+Produtos * buscarProduto(Produtos *listaP, int k);
 void editarProduto(Produtos *listaP);
 void removerProduto(Produtos *listaP);
 void menuProdutos(Produtos *listaP);
-void nomeDinamicoProdutos(Produtos *novo);
+void nomeDinamicoProduto(Produtos *novo);
 
-Carrinhos * criarlistaCarrinhos();
+Carrinhos * criarCarrinho();
 void adicionarProdutoCarrinho(Clientes *listaC, Produtos *listaP);
 void listarCarrinhoCliente(Clientes *listaC);
 void removerProdutoCarrinho(Clientes *listaC);
-void modoComprador(Carrinhos *listaCar, Clientes *listaC, Produtos *listaP);
+void modoComprador(Clientes *listaC, Produtos *listaP);
 
-void menuPrincipal(int *i,Carrinhos *listaCar,Clientes *listaC , Produtos *listaP);
+void menuPrincipal(int *i,Clientes *listaC , Produtos *listaP);
 
 #endif
