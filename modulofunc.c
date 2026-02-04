@@ -539,10 +539,10 @@ void removerProduto(Produtos *listaP, Clientes *listaC)
         printf("Codigo nao encontrado\n");
         return;
     }
+    
         removerProdutoCarrinhos(listaC, atual);
-
         anterior->prox = atual->prox;
-   
+        free(atual->nome);
         free(atual);
         printf("Produto removido com sucesso\n");
 };
