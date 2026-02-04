@@ -1,6 +1,5 @@
 #include "modulofunc.h"
 
-
 //funcoes inicio 
 
 void liberarMemoriaCarrinho(Carrinhos *carrinhoC)
@@ -35,7 +34,6 @@ void liberarMemoriaClientes(Clientes *listaC)
     free(listaC);
 };
 
-
 void liberarMemoriaProdutos(Produtos *listaP)
 {
     Produtos *atual = listaP->prox;
@@ -49,10 +47,6 @@ void liberarMemoriaProdutos(Produtos *listaP)
     }
     free(listaP);
 };
-
-
-
-
 
 void limpaBuffer()
 {
@@ -146,6 +140,42 @@ Produtos * criarlistaProdutos()
 
     return listaP;
 };
+
+void removerProdutoCarrinhos(Clientes *listaC, Produtos *produtoR)
+{
+    Clientes *removerCl = listaC->prox;
+    while(removerCl!=NULL)
+    {
+        if(removerCl->carrinhoC!=NULL)
+        {
+            ProdutosCarrinho *atual = removerCl->carrinhoC->items;
+            ProdutosCarrinho *ant = NULL;
+
+            while(atual != NULL)
+            {
+                if(atual->produto==produtoR)
+                {
+                    if(ant == NULL)
+                    {
+                        removerCl->carrinhoC->items = atual->prox;
+                    }
+                    else
+                    {
+                        ant->prox = atual->prox;
+                    }
+                    ProdutosCarrinho *temp = atual;
+                    atual=atual->prox;
+                    free(temp);
+                    continue;
+                }
+                ant=atual;
+                atual=atual->prox;
+            }
+        }
+        removerCl=removerCl->prox;
+    }
+
+}
 
 //funções do cliente
 
@@ -433,7 +463,7 @@ Produtos * buscarProduto(Produtos *listaP, int k)
         busca = busca->prox;
     }
     return busca;
-}
+};
 
 void editarProduto(Produtos *listaP)
 {
@@ -486,17 +516,17 @@ void editarProduto(Produtos *listaP)
     }
 }
 
-void removerProduto(Produtos *listaP)
+void removerProduto(Produtos *listaP, Clientes *listaC)
 {
     if(listaP->prox == NULL)
     {
         printf("Nenhum produto cadastrado\n");
         return;
     }
-    Produtos *atual = listaP;
-    Produtos *anterior = NULL;
+    listarProduto(listaP);
+    Produtos *atual = listaP->prox;
+    Produtos *anterior = listaP;
     char buscador[20];
-
     printf("Digite o codigo do produto a ser removido: ");
     scanf("%19s", buscador);
 
@@ -507,16 +537,15 @@ void removerProduto(Produtos *listaP)
 
     if (atual == NULL) {
         printf("Codigo nao encontrado\n");
-    } else {
-        if (anterior == NULL) {
-            listaP->prox = atual->prox;
-        } else {
-            anterior->prox = atual->prox;
-        }
+        return;
+    }
+        removerProdutoCarrinhos(listaC, atual);
+
+        anterior->prox = atual->prox;
+   
         free(atual);
         printf("Produto removido com sucesso\n");
-    }
-}
+};
 
 //funcoes do carrinho
 
@@ -652,13 +681,14 @@ void listarCarrinhoCliente(Clientes *listaC)
     printf("Valor Total da Compra: %.2f\n", valorTotal);
 }
 
-void removerProdutoCarrinho(Clientes *listaC)
+void removerProdutoCarrinho(Clientes *listaC, Produtos *listaP)
 {
     if(listaC->prox == NULL)
     {
         printf("Nenhum cliente cadastrado\n");
         return;
     }
+    ListarCliente(listaC);
     Clientes *cliente = buscarCliente(listaC, 0);
     if (cliente == NULL)
     {
@@ -671,7 +701,7 @@ void removerProdutoCarrinho(Clientes *listaC)
         printf("Carrinho vazio\n");
         return;
     }
-
+    listarProduto(listaP);
     char codigo[20];
     printf("Digite o codigo do produto a ser removido:");
     scanf("%19s", codigo);
@@ -702,7 +732,6 @@ void removerProdutoCarrinho(Clientes *listaC)
     }
     printf("Produto nao encontrado no carrinho\n");
 }
-
 
 //funcoes do menu
 
@@ -782,7 +811,7 @@ void menuClientes(Clientes *listaC)
     } while(selecionarClientes != 6);
 }
 
-void menuProdutos(Produtos *listaP)
+void menuProdutos(Produtos *listaP, Clientes *listaC)
 {
     int selecionarProdutos;
     Produtos *buscaPd;
@@ -846,7 +875,7 @@ void menuProdutos(Produtos *listaP)
 
             case 5:
                 limparTela();
-                removerProduto(listaP);
+                removerProduto(listaP, listaC);
                 break;
 
             case 6:
@@ -895,7 +924,7 @@ void modoComprador(Clientes *listaC, Produtos *listaP)
 
             case 3:
                 limparTela();
-                removerProdutoCarrinho(listaC);
+                removerProdutoCarrinho(listaC, listaP);
                 break;
 
             case 4:
@@ -935,7 +964,7 @@ void menuPrincipal(int *i, Clientes *listaC, Produtos *listaP)
             break;
 
         case 2:
-            menuProdutos(listaP);
+            menuProdutos(listaP, listaC);
             break;
 
         case 3:
