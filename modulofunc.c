@@ -319,7 +319,6 @@ void editarCliente(Clientes *listaC)
                 printf("cpf invalido (menos de 11 digitos)\n");
             }
             j=0;
-            limpaBuffer();
             printf("digite o Cpf:");
             if(scanf("%11[0-9]", atual->cpf)!=1)
             {
@@ -339,8 +338,41 @@ void editarCliente(Clientes *listaC)
             printf("Erro ao ler nome\n");
             return;
         }
-        printf("digite o novo Telefone:");
-        scanf("%s", atual->telefone);
+        int telefoneValido = 0;
+        do
+        {
+            printf("Digite o telefone (11 numeros): ");
+            scanf("%s", atual->telefone);
+            limpaBuffer(); 
+
+            int erro = 0;
+
+            if (strlen(atual->telefone) != 11)
+            {
+                erro = 1;
+            }
+            else
+            {
+                for (int i = 0; i < 11; i++)
+                {
+                    if (atual->telefone[i] < '0' || atual->telefone[i] > '9')
+                    {
+                        erro = 1;
+                        break;
+                    }
+                }
+            }
+
+            if (erro)
+            {
+                printf("Ocorreu um erro no telefone.\n");
+            }
+            else
+            {
+                telefoneValido = 1;
+            }
+
+    }while(!telefoneValido);
     }
 }
 
@@ -476,13 +508,9 @@ void editarProduto(Produtos *listaP)
         printf("Codigo nao encontrado\n");
     } 
     else 
-    {
-
-        limpaBuffer();
-    
+    {    
         printf("digite o novo nome do produto:");
         nomeDinamicoProduto(novo);
-
         printf("digite o novo codigo do produto:");
         if(scanf("%19s", novo->codigo)!=1)
         {
