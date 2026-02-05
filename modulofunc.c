@@ -51,7 +51,7 @@ void liberarMemoriaProdutos(Produtos *listaP)
 void limpaBuffer()
 {
     int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+    while ((c = getchar()) != '\n');
     // void que limpa o buffer inteiro caso algo que nao seja um int seja a entrada do menu
     // usar sempre que depois do scanf quando for entrada para os menus.
 }
@@ -202,10 +202,9 @@ void cadastrarCliente(Clientes *listaC)
             novo->cpf[0] = '\0';
             continue;
         }
-        limpaBuffer();
         j++;
     } while(strlen(novo->cpf) != 11);
-
+    limpaBuffer();
     printf("digite o Nome: ");
     nomeDinamicoCliente(novo);
     if(novo->nome == NULL)
